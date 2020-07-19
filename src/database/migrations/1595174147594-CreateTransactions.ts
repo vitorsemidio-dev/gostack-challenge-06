@@ -17,6 +17,7 @@ export default class CreateTransactions1595174147594
             type: 'uuid',
             isPrimary: true,
             generationStrategy: 'uuid',
+            default: 'uuid_generate_v4()',
           },
           {
             name: 'title',
