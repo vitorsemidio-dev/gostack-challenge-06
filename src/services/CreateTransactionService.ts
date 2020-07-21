@@ -1,10 +1,9 @@
-// import AppError from '../errors/AppError';
-import { getCustomRepository } from 'typeorm';
+import { getCustomRepository, getRepository } from 'typeorm';
 
+import AppError from '../errors/AppError';
 import Transaction from '../models/Transaction';
-
+import Category from '../models/Category';
 import TransactionsRepository from '../repositories/TransactionsRepository';
-import CategoriesRepository from '../repositories/CategoriesRepository';
 
 interface IRequest {
   title: string;
@@ -21,7 +20,7 @@ class CreateTransactionService {
     category,
   }: IRequest): Promise<Transaction> {
     const transactionsRepository = getCustomRepository(TransactionsRepository);
-    const categoriesRepository = getCustomRepository(CategoriesRepository);
+    const categoriesRepository = getRepository(Category);
 
     let categoryAlreadyExists = await categoriesRepository.findOne({
       where: { title: category },
@@ -31,6 +30,14 @@ class CreateTransactionService {
       categoryAlreadyExists = categoriesRepository.create({
         title: category,
       });
+    }
+
+    if (type === 'outcome') {
+      const { total } = await transactionsRepository.getBalance();
+
+      if (total < value) {
+        throw new AppError('Invalid Balance', 400);
+      }
     }
 
     await categoriesRepository.save(categoryAlreadyExists);
