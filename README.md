@@ -130,6 +130,6 @@ Ice cream, outcome, 3, Food
 
 ## Teste
 
-Com o banco de dados e a aplicação rodando, para iniciar os testes basta utilizar o seguinte comando: `yarn test`.
+Com o banco de dados e a aplicação rodando, para iniciar os testes basta utilizar o seguinte comando: `npm run test`.
 
 ![](.github/Imagem-testes.png)
